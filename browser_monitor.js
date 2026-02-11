@@ -59,18 +59,25 @@ async function startMonitoring() {
         console.log("ℹ️  Local Chrome not found, trying Puppeteer bundled version...");
     }
 
-    const browser = await puppeteer.launch({
-        headless: false, // User needs to see browser to login
-        defaultViewport: null,
-        executablePath: executablePath || undefined, // Use local Chrome if found
-        args: [
-            '--start-maximized',
-            '--disable-notifications',
-            '--no-sandbox'
-        ]
-    });
+    // Connect to already running Chrome (Started by start_real_chrome.bat)
+    console.log("👉 Connecting to YOUR Real Chrome...");
+    
+    let browser;
+    try {
+        browser = await puppeteer.connect({
+            browserURL: 'http://127.0.0.1:9222',
+            defaultViewport: null
+        });
+        console.log("✅ Connected successfully!");
+    } catch (e) {
+        console.error("❌ FAILED TO CONNECT TO CHROME. Did you run 'start_real_chrome.bat'?");
+        console.error(e.message);
+        process.exit(1);
+    }
 
-    const page = await browser.newPage();
+    // Get the active page (don't open a new one if possible)
+    const pages = await browser.pages();
+    const page = pages.length > 0 ? pages[0] : await browser.newPage();
     
     // Attempt to go to login page
     try {
