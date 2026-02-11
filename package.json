@@ -1,0 +1,17 @@
+{
+  "name": "x-autoreply",
+  "version": "1.0.0",
+  "description": "This bot monitors your \"Following\" timeline and automatically replies to new tweets.",
+  "main": "monitor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.4",
+    "puppeteer": "^24.37.2",
+    "twitter-api-v2": "^1.29.0"
+  }
+}
